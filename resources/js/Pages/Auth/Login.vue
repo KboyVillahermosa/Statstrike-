@@ -33,67 +33,87 @@ const submit = () => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
+        <!-- Header -->
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-gray-400">Sign in to continue your training journey</p>
         </div>
 
-        <form @submit.prevent="submit">
+        <!-- Status Message -->
+        <div v-if="status" class="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <p class="text-green-400 text-sm font-medium">{{ status }}</p>
+        </div>
+
+        <form @submit.prevent="submit" class="space-y-6">
+            <!-- Email Field -->
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Email" class="text-gray-300 font-semibold" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="bg-gray-900/50 border-gray-800 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-orange-500/50"
                     v-model="form.email"
                     required
                     autofocus
                     autocomplete="username"
+                    placeholder="your.email@example.com"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <!-- Password Field -->
+            <div>
+                <InputLabel for="password" value="Password" class="text-gray-300 font-semibold" />
 
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="bg-gray-900/50 border-gray-800 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-orange-500/50"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
+                    placeholder="••••••••"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4 block">
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
+                    <span class="ms-2 text-sm text-gray-400">Remember me</span>
                 </label>
-            </div>
 
-            <div class="mt-4 flex items-center justify-end">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="text-sm text-orange-500 hover:text-orange-400 transition-colors"
                 >
-                    Forgot your password?
+                    Forgot password?
                 </Link>
+            </div>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
+            <!-- Submit Button -->
+            <button
+                type="submit"
+                :disabled="form.processing"
+                class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <span v-if="form.processing">Signing in...</span>
+                <span v-else>Sign In</span>
+            </button>
+
+            <!-- Register Link -->
+            <div class="text-center pt-4 border-t border-gray-900">
+                <p class="text-gray-400 text-sm">
+                    Don't have an account?
+                    <Link :href="route('register')" class="text-orange-500 hover:text-orange-400 font-semibold transition-colors">
+                        Sign up
+                    </Link>
+                </p>
             </div>
         </form>
     </GuestLayout>
