@@ -5,29 +5,30 @@ import StatCard from '@/Components/StatCard.vue';
 import WeeklyActivityChart from '@/Components/WeeklyActivityChart.vue';
 import ActiveChallengesList from '@/Components/ActiveChallengesList.vue';
 import RecentWorkoutsTable from '@/Components/RecentWorkoutsTable.vue';
-import { ref } from 'vue';
 
-// Mock data - In production, this would come from Inertia props
-const weeklyActivityData = ref([
-  { label: 'Mon', height: 45 },
-  { label: 'Tue', height: 65 },
-  { label: 'Wed', height: 40 },
-  { label: 'Thu', height: 75 },
-  { label: 'Fri', height: 60 },
-  { label: 'Sat', height: 85 },
-  { label: 'Sun', height: 35 },
-]);
-
-const activeChallenges = ref([
-  { id: 1, title: '500 Kicks Challenge', current: 325, total: 500 },
-  { id: 2, title: '20 Rounds of Sparring', current: 19, total: 20 },
-]);
-
-const recentWorkouts = ref([
-  { id: 1, type: 'Boxing', duration: '45 min', rpe: '8/10', date: '2 days ago' },
-  { id: 2, type: 'Kicking Drills', duration: '60 min', rpe: '7/10', date: '3 days ago' },
-  { id: 3, type: 'Sparring', duration: '30 min', rpe: '9/10', date: '5 days ago' },
-]);
+const props = defineProps({
+    stats: {
+        type: Object,
+        default: () => ({
+            totalWorkouts: { metric: '0', change: 'No workouts yet', changePositive: false },
+            timeTrained: { metric: '0h 0m', change: 'No training yet', changePositive: false },
+            followers: { metric: '0', change: '+0 this month', changePositive: true },
+            leaderboardRank: { metric: '#0', change: 'Top 0%', changePositive: true },
+        }),
+    },
+    weeklyActivity: {
+        type: Array,
+        default: () => [],
+    },
+    activeChallenges: {
+        type: Array,
+        default: () => [],
+    },
+    recentWorkouts: {
+        type: Array,
+        default: () => [],
+    },
+});
 </script>
 
 <template>
@@ -38,30 +39,30 @@ const recentWorkouts = ref([
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
             <StatCard
                 title="Total Workouts"
-                metric="128"
-                change="+16 since last month"
-                :change-positive="true"
+                :metric="stats.totalWorkouts.metric"
+                :change="stats.totalWorkouts.change"
+                :change-positive="stats.totalWorkouts.changePositive"
                 icon="📊"
             />
             <StatCard
                 title="Time Trained"
-                metric="96h 30m"
-                change="+8h this month"
-                :change-positive="true"
+                :metric="stats.timeTrained.metric"
+                :change="stats.timeTrained.change"
+                :change-positive="stats.timeTrained.changePositive"
                 icon="⏱️"
             />
             <StatCard
                 title="Followers"
-                metric="482"
-                change="+21 this month"
-                :change-positive="true"
+                :metric="stats.followers.metric"
+                :change="stats.followers.change"
+                :change-positive="stats.followers.changePositive"
                 icon="👥"
             />
             <StatCard
                 title="Leaderboard Rank"
-                metric="#12"
-                change="Top 5%"
-                :change-positive="true"
+                :metric="stats.leaderboardRank.metric"
+                :change="stats.leaderboardRank.change"
+                :change-positive="stats.leaderboardRank.changePositive"
                 icon="📈"
             />
         </div>
@@ -73,7 +74,7 @@ const recentWorkouts = ref([
                 <WeeklyActivityChart
                     title="Weekly Activity"
                     subtitle="Your workout frequency for the last 7 days."
-                    :bars="weeklyActivityData"
+                    :bars="weeklyActivity"
                 />
             </div>
 
