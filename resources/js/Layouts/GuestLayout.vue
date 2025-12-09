@@ -12,7 +12,7 @@ import { Link } from '@inertiajs/vue3';
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                 </div>
-                <span class="text-2xl font-bold text-white">Stat Strike</span>
+                <span class="text-2xl font-bold text-white">Change Test</span>
             </Link>
         </div>
 
