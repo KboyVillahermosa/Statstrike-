@@ -2,6 +2,7 @@
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
+import LogoutForm from './Partials/LogoutForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
 
@@ -39,7 +40,11 @@ const props = defineProps({
 
             <div class="bg-gray-950 border border-gray-900 rounded-lg p-6 shadow-xl">
                 <UpdatePasswordForm />
-                </div>
+            </div>
+
+            <div class="bg-gray-950 border border-gray-900 rounded-lg p-6 shadow-xl">
+                <LogoutForm />
+            </div>
 
             <div class="bg-gray-950 border border-gray-900 rounded-lg p-6 shadow-xl">
                 <DeleteUserForm />
