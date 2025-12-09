@@ -123,7 +123,7 @@ const submit = () => {
                     Already have an account?
                     <Link :href="route('login')" class="text-orange-500 hover:text-orange-400 font-semibold transition-colors">
                         Sign in
-                    </Link>
+                </Link>
                 </p>
             </div>
         </form>

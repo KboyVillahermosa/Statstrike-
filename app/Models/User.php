@@ -21,6 +21,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo',
+        'fitness_goal',
+        'experience_level',
+        'subscription_tier',
+        'device_capability',
+        'mediapipe_supported',
+        'points',
     ];
 
     /**
@@ -43,6 +50,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'device_capability' => 'array',
+            'mediapipe_supported' => 'boolean',
         ];
     }
 
@@ -52,5 +61,47 @@ class User extends Authenticatable
     public function workouts()
     {
         return $this->hasMany(Workout::class);
+    }
+
+    /**
+     * Get the challenges that the user has joined.
+     */
+    public function challenges()
+    {
+        return $this->belongsToMany(Challenge::class)
+            ->withPivot('progress', 'joined_at', 'completed_at')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the challenge sessions for the user.
+     */
+    public function challengeSessions()
+    {
+        return $this->hasMany(ChallengeSession::class);
+    }
+
+    /**
+     * Get the posts created by the user.
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Get the likes given by the user.
+     */
+    public function postLikes()
+    {
+        return $this->hasMany(PostLike::class);
+    }
+
+    /**
+     * Get the comments created by the user.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

@@ -23,11 +23,11 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div
-        v-if="sidebarOpen"
-        @click="sidebarOpen = false"
+    <div
+      v-if="sidebarOpen"
+      @click="sidebarOpen = false"
         class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-      ></div>
+    ></div>
     </Transition>
 
     <!-- Sidebar -->
@@ -57,8 +57,9 @@
           icon="workouts"
           :items="[
             { id: 1, label: 'Log Workout', href: '/workouts/log', icon: 'document' },
-            { id: 2, label: 'Workout Templates', href: '/workouts/templates', icon: 'clipboard' },
-            { id: 3, label: 'Motion Tracker', href: '/workouts/tracker', icon: 'camera' }
+            { id: 2, label: 'Workout History', href: '/workouts/history', icon: 'chart' },
+            { id: 3, label: 'Workout Templates', href: '/workouts/templates', icon: 'clipboard' },
+            { id: 4, label: 'Motion Tracker', href: '/workouts/tracker', icon: 'camera' }
           ]"
         />
         <NavLink href="/challenges" :active="isActive('/challenges')" icon="trophy">
@@ -82,7 +83,7 @@
             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-          </div>
+        </div>
           <span class="font-medium truncate">User</span>
         </Link>
       </div>

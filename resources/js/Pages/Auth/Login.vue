@@ -99,7 +99,7 @@ const submit = () => {
             <!-- Submit Button -->
             <button
                 type="submit"
-                :disabled="form.processing"
+                    :disabled="form.processing"
                 class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 <span v-if="form.processing">Signing in...</span>

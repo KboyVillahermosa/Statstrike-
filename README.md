@@ -7,15 +7,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Build Instructions
-
-**Important:** This project requires `npm install --legacy-peer-deps` instead of `npm ci` due to peer dependency conflicts between Vite 7 and other packages. The `.npmrc` file is configured for local development, but build environments should use:
-
-```bash
-npm install --legacy-peer-deps
-npm run build
-```
-
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
