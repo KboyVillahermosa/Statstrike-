@@ -7,10 +7,8 @@ import { Link } from '@inertiajs/vue3';
         <!-- Logo -->
         <div class="mb-8">
             <Link href="/" class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-orange-500/20">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/20 overflow-hidden">
+                    <img src="/images/48pxLogo.png" alt="Stat Strike" class="w-full h-full object-cover rounded-full" />
                 </div>
                 <span class="text-2xl font-bold text-white">Stat Strike</span>
             </Link>
