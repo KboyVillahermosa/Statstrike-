@@ -68,9 +68,15 @@
         <NavLink href="/community" :active="isActive('/community')" icon="community">
           Community
         </NavLink>
-        <NavLink href="/ai-tools" :active="isActive('/ai-tools')" icon="ai">
-          AI Tools
-        </NavLink>
+        <NavDropdown
+          title="AI Tools"
+          icon="ai"
+          :items="[
+            { id: 1, label: 'Workout Generator', href: '/ai-tools/workout-generator', icon: 'wrench' },
+            { id: 2, label: 'Progress Insights', href: '/ai-tools/progress-insights', icon: 'chart' },
+            { id: 3, label: 'Boxing Coach', href: '/ai-tools/boxing-coach', icon: 'boxing' }
+          ]"
+        />
       </nav>
 
       <!-- User Section -->

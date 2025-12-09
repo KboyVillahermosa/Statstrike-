@@ -63,7 +63,8 @@ defineProps({
 });
 
 const getRPEStyles = (rpe) => {
-  const value = parseInt(rpe);
+  // Handle both "8/10" format and plain numbers
+  const value = typeof rpe === 'string' ? parseInt(rpe.split('/')[0]) : parseInt(rpe);
   if (value >= 9) return 'bg-red-600';
   if (value >= 8) return 'bg-orange-600';
   if (value >= 7) return 'bg-orange-500';
