@@ -1,34 +1,29 @@
 <script setup>
 import DangerButton from '@/Components/DangerButton.vue';
 import { ref } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 const processing = ref(false);
 
-const logout = async () => {
+const logout = () => {
     if (processing.value) return;
     processing.value = true;
 
-    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-    try {
-        await fetch('/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': token || '',
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({}),
-        });
-
-        // On success redirect to homepage (or reload to clear session)
-        window.location.href = '/';
-    } catch (e) {
-        // fallback: reload page
-        window.location.reload();
-    } finally {
-        processing.value = false;
-    }
+    router.post(route('logout'), {}, {
+        preserveState: false,
+        replace: true,
+        onSuccess: () => {
+            // Ensure a fresh visit so $page.props.auth.user is updated
+            router.visit('/', { replace: true, preserveState: false });
+        },
+        onError: () => {
+            // In case of any error, still force a fresh visit
+            router.visit('/', { replace: true, preserveState: false });
+        },
+        onFinish: () => {
+            processing.value = false;
+        },
+    });
 };
 </script>
 
