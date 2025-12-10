@@ -72,9 +72,9 @@
           </div>
 
           <!-- Posts Feed -->
-          <div v-if="posts.length > 0" class="space-y-6">
+          <div v-if="formattedPosts.length > 0" class="space-y-6">
             <div
-              v-for="post in posts"
+              v-for="post in formattedPosts"
               :key="post.id"
               class="bg-gray-950 rounded-xl border border-gray-900 p-6"
             >
@@ -102,8 +102,8 @@
               <p class="text-gray-300 mb-4 whitespace-pre-wrap">{{ post.content }}</p>
 
               <!-- Post Image -->
-              <div v-if="post.image" class="rounded-lg overflow-hidden mb-4">
-                <img :src="post.image" :alt="post.user.name" class="w-full h-auto object-cover" />
+              <div v-if="post.image_url" class="rounded-lg overflow-hidden mb-4">
+                <img :src="post.image_url" :alt="post.user.name" class="w-full h-auto object-cover" />
               </div>
 
               <!-- Engagement Metrics -->
@@ -282,7 +282,7 @@
 <script setup>
 import { Head, router, useForm } from '@inertiajs/vue3';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   posts: {
@@ -326,14 +326,26 @@ const clearPostImage = () => {
 };
 
 const submitPost = () => {
-  postForm.post(route('community.posts.store'), {
+  // Use FormData to properly send file data
+  const formData = new FormData();
+  formData.append('content', postForm.content);
+  if (postForm.image) {
+    formData.append('image', postForm.image);
+  }
+
+  // Use router.post with FormData
+  router.post(route('community.posts.store'), formData, {
     preserveScroll: true,
     onSuccess: () => {
-      postForm.reset();
+      // Only reset after successful submission
+      postForm.content = '';
+      postForm.image = null;
       clearPostImage();
       if (window.toast) {
         window.toast.success('Post created successfully!');
       }
+      // Force reload to get fresh data including the new post
+      router.reload();
     },
     onError: () => {
       if (window.toast) {
@@ -342,6 +354,15 @@ const submitPost = () => {
     },
   });
 };
+
+// Add a computed property to ensure image URLs are properly formatted
+const formattedPosts = computed(() => {
+  return props.posts.map(post => ({
+    ...post,
+    // Ensure image URL is properly formatted
+    image_url: post.image
+  }));
+});
 
 const toggleLike = (post) => {
   router.post(route('community.posts.like', post.id), {}, {
