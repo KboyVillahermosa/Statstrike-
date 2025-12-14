@@ -4,10 +4,11 @@ use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\WorkoutHistoryController;
+use App\Http\Controllers\WorkoutRoutineController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WorkoutLogController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -19,6 +20,11 @@ Route::get('/', function () {
     ]);
 });
 
+// Workout logging endpoints (session-authenticated)
+Route::post('/workout/log-exercise', [WorkoutLogController::class, 'logExercise'])->middleware('auth');
+Route::post('/workout/complete-day', [WorkoutLogController::class, 'completeDay'])->middleware('auth');
+Route::get('/workout/history', [WorkoutLogController::class, 'history'])->middleware('auth')->name('workout.history');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -27,17 +33,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Workout routes
-    Route::get('/workouts/log', [WorkoutController::class, 'create'])->name('workouts.log');
-    Route::post('/workouts/log', [WorkoutController::class, 'store'])->name('workouts.store');
     Route::get('/workouts/history', [WorkoutHistoryController::class, 'index'])->name('workouts.history');
 
-    Route::get('/workouts/templates', function () {
-        return Inertia::render('Workouts/WorkoutTemplates');
-    })->name('workouts.templates');
-
-    Route::get('/workouts/tracker', function () {
-        return Inertia::render('Workouts/MotionTracker');
-    })->name('workouts.tracker');
+    Route::get('/workouts/templates', [WorkoutRoutineController::class, 'index'])->name('workouts.templates');
+    Route::post('/workouts/routines', [WorkoutRoutineController::class, 'store'])->name('workouts.routines.store');
+    Route::put('/workouts/routines/{workoutRoutine}', [WorkoutRoutineController::class, 'update'])->name('workouts.routines.update');
+    Route::delete('/workouts/routines/{workoutRoutine}', [WorkoutRoutineController::class, 'destroy'])->name('workouts.routines.destroy');
 
     // Challenge routes
     Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.index');

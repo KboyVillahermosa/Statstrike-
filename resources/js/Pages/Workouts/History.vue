@@ -167,10 +167,7 @@ const totalHours = computed(() => {
                             </tr>
                             <tr v-if="!workouts.data || workouts.data.length === 0">
                                 <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
-                                    No workouts found. 
-                                    <Link href="/workouts/log" class="text-orange-500 hover:text-orange-400 ml-1">
-                                        Log your first workout
-                                    </Link>
+                                    No workouts found. Complete workouts from your routines or challenges to see them here.
                                 </td>
                             </tr>
                         </tbody>
