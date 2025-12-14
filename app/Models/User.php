@@ -64,6 +64,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the workout routines for the user.
+     */
+    public function workoutRoutines()
+    {
+        return $this->hasMany(WorkoutRoutine::class);
+    }
+
+    /**
      * Get the challenges that the user has joined.
      */
     public function challenges()

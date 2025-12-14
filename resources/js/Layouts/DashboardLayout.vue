@@ -54,10 +54,8 @@
           title="Workouts"
           icon="workouts"
           :items="[
-            { id: 1, label: 'Log Workout', href: '/workouts/log', icon: 'document' },
             { id: 2, label: 'Workout History', href: '/workouts/history', icon: 'chart' },
-            { id: 3, label: 'Workout Templates', href: '/workouts/templates', icon: 'clipboard' },
-            { id: 4, label: 'Motion Tracker', href: '/workouts/tracker', icon: 'camera' }
+            { id: 3, label: 'Workout Routine', href: '/workouts/templates', icon: 'clipboard' }
           ]"
         />
         <NavLink href="/challenges" :active="isActive('/challenges')" icon="trophy">
@@ -71,8 +69,7 @@
           icon="ai"
           :items="[
             { id: 1, label: 'Workout Generator', href: '/ai-tools/workout-generator', icon: 'wrench' },
-            { id: 2, label: 'Progress Insights', href: '/ai-tools/progress-insights', icon: 'chart' },
-            { id: 3, label: 'Boxing Coach', href: '/ai-tools/boxing-coach', icon: 'boxing' }
+            { id: 2, label: 'Boxing Coach', href: '/ai-tools/boxing-coach', icon: 'boxing' }
           ]"
         />
       </nav>
