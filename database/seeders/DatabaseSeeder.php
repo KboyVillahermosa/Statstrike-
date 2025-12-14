@@ -23,6 +23,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            ExerciseCategorySeeder::class,
+            ExerciseSeeder::class,
+            WorkoutProgramSeeder::class,
             ChallengeSeeder::class,
         ]);
     }

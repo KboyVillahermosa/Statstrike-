@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('workout_session_exercises', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('workout_session_id')->constrained()->onDelete('cascade');
+            $table->foreignId('exercise_id')->constrained()->onDelete('cascade');
+            $table->integer('order')->default(0);
+            $table->integer('sets_completed')->default(0);
+            $table->integer('reps_completed')->default(0);
+            $table->integer('duration_seconds')->nullable(); // For timed exercises
+            $table->json('set_data')->nullable(); // Store individual set data (reps, weight, etc.)
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('workout_session_exercises');
+    }
+};

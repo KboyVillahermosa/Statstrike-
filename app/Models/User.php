@@ -104,4 +104,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * Get the workout sessions for the user.
+     */
+    public function workoutSessions()
+    {
+        return $this->hasMany(WorkoutSession::class);
+    }
 }

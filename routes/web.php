@@ -3,9 +3,12 @@
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\WorkoutHistoryController;
+use App\Http\Controllers\WorkoutProgramController;
+use App\Http\Controllers\WorkoutSessionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,6 +41,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/workouts/tracker', function () {
         return Inertia::render('Workouts/MotionTracker');
     })->name('workouts.tracker');
+
+    // Exercise Library routes
+    Route::get('/exercises', [ExerciseController::class, 'index'])->name('exercises.index');
+    Route::get('/exercises/{exercise}', [ExerciseController::class, 'show'])->name('exercises.show');
+
+    // Workout Program routes
+    Route::get('/workout-programs', [WorkoutProgramController::class, 'index'])->name('workout-programs.index');
+    Route::get('/workout-programs/{workoutProgram}', [WorkoutProgramController::class, 'show'])->name('workout-programs.show');
+
+    // Workout Session routes
+    Route::get('/workout-sessions/create', [WorkoutSessionController::class, 'create'])->name('workout-sessions.create');
+    Route::post('/workout-sessions/start', [WorkoutSessionController::class, 'start'])->name('workout-sessions.start');
+    Route::get('/workout-sessions/{workoutSession}/track', [WorkoutSessionController::class, 'track'])->name('workout-sessions.track');
+    Route::post('/workout-sessions/{workoutSession}/exercises', [WorkoutSessionController::class, 'addExercise'])->name('workout-sessions.add-exercise');
+    Route::put('/workout-sessions/{workoutSession}/exercises/{exercise}', [WorkoutSessionController::class, 'updateExercise'])->name('workout-sessions.update-exercise');
+    Route::post('/workout-sessions/{workoutSession}/complete', [WorkoutSessionController::class, 'complete'])->name('workout-sessions.complete');
+    Route::get('/workout-sessions/{workoutSession}/summary', [WorkoutSessionController::class, 'summary'])->name('workout-sessions.summary');
 
     // Challenge routes
     Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.index');
