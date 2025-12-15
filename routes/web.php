@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WorkoutHistoryController;
 use App\Http\Controllers\WorkoutRoutineController;
+use App\Http\Controllers\WorkoutController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WorkoutLogController;
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
 
     // Workout routes
     Route::get('/workouts/history', [WorkoutHistoryController::class, 'index'])->name('workouts.history');
+    Route::post('/workouts/log', [WorkoutController::class, 'store'])->name('workouts.store');
 
     Route::get('/workouts/templates', [WorkoutRoutineController::class, 'index'])->name('workouts.templates');
     Route::post('/workouts/routines', [WorkoutRoutineController::class, 'store'])->name('workouts.routines.store');
