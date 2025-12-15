@@ -6,14 +6,29 @@
         <div class="font-bold text-white text-base sm:text-lg uppercase tracking-wider">
           {{ day.label }}
         </div>
-        <div 
-          v-if="workout"
-          class="w-3 h-3 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50 animate-pulse"
-        ></div>
-        <div 
-          v-else
-          class="w-3 h-3 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50"
-        ></div>
+        <div class="flex items-center gap-2">
+          <!-- Delete button for workout days -->
+          <button 
+            v-if="workout"
+            @click.stop="deleteDay"
+            class="p-1.5 text-gray-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
+            title="Delete this workout"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+          
+          <!-- Status indicator -->
+          <div 
+            v-if="workout"
+            class="w-3 h-3 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50 animate-pulse"
+          ></div>
+          <div 
+            v-else
+            class="w-3 h-3 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50"
+          ></div>
+        </div>
       </div>
     </div>
 
@@ -98,11 +113,15 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['start-workout']);
+const emit = defineEmits(['start-workout', 'delete-day']);
 
 const workout = computed(() => {
   return props.routine.days?.find(d => d.day_of_week === props.day.value);
 });
+
+function deleteDay() {
+  emit('delete-day');
+}
 </script>
 
 <style scoped>
