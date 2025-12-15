@@ -209,8 +209,174 @@
 
     </div>
 
-    <!-- Builder Modal (unchanged) -->
-    
+
+    <!-- Builder Modal -->
+    <div v-if="builder.open" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="closeBuilder"></div>
+      <div class="relative bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-800 rounded-xl p-6 sm:p-8 w-full max-w-5xl max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div class="flex items-start justify-between mb-6">
+          <div>
+            <h3 class="text-2xl font-bold text-white">{{ builder.editing ? 'Edit Routine' : 'Create Routine' }}</h3>
+            <p class="text-sm text-gray-400 mt-1">Configure routine info and daily workouts</p>
+          </div>
+          <button class="text-gray-400 hover:text-white transition-colors" @click="closeBuilder">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form @submit.prevent="saveRoutine" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Routine Name *</label>
+              <input 
+                v-model="builder.form.name" 
+                required
+                class="w-full bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" 
+                placeholder="e.g. Boxing Weekly Program"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Active Status</label>
+              <select 
+                v-model="builder.form.is_active"
+                class="w-full bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+              >
+                <option :value="true">Active</option>
+                <option :value="false">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Description (Optional)</label>
+            <textarea 
+              v-model="builder.form.description" 
+              class="w-full bg-gray-800 text-white rounded-lg px-4 py-3 border border-gray-700 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all resize-none" 
+              rows="2" 
+              placeholder="Describe your workout routine"
+            ></textarea>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-lg font-semibold text-white">Weekly Schedule</h4>
+              <p class="text-xs text-gray-400">Toggle days to add workouts; leave off for rest days</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div 
+                v-for="day in daysOfWeek" 
+                :key="day.value"
+                :class="[
+                  'rounded-lg p-4 border-2 transition-all',
+                  hasDayWorkout(day.value)
+                    ? 'bg-gray-800 border-orange-500/30'
+                    : 'bg-gray-800/50 border-gray-700/50 border-dashed'
+                ]"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <div class="font-bold text-white text-xs uppercase tracking-wide">{{ day.label }}</div>
+                  <button
+                    type="button"
+                    @click="toggleDayWorkout(day.value)"
+                    :class="[
+                      'w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all',
+                      hasDayWorkout(day.value)
+                        ? 'bg-orange-500 border-orange-500 text-white'
+                        : 'bg-transparent border-gray-600 hover:border-gray-500 text-gray-400'
+                    ]"
+                  >
+                    <svg v-if="hasDayWorkout(day.value)" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </button>
+                </div>
+                
+                <div v-if="hasDayWorkout(day.value)" class="space-y-3">
+                  <input 
+                    v-model="builder.form.days[day.value].title" 
+                    required
+                    class="w-full bg-gray-900 text-white text-sm rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none" 
+                    placeholder="Workout title"
+                  />
+                  <textarea 
+                    v-model="builder.form.days[day.value].description" 
+                    class="w-full bg-gray-900 text-white text-xs rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none resize-none" 
+                    rows="2" 
+                    placeholder="Description (optional)"
+                  ></textarea>
+                  <div>
+                    <label class="text-xs text-gray-400 mb-1 block">Exercises (one per line) *</label>
+                    <textarea 
+                      v-model="builder.form.days[day.value].exercisesRaw" 
+                      required
+                      class="w-full bg-gray-900 text-white text-xs rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none resize-none" 
+                      rows="4" 
+                      placeholder="Exercise 1&#10;Exercise 2&#10;Exercise 3"
+                    ></textarea>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="text-xs text-gray-400 mb-1 block">Rounds</label>
+                      <input 
+                        type="number" 
+                        v-model.number="builder.form.days[day.value].rounds" 
+                        min="1" 
+                        max="20"
+                        required
+                        class="w-full bg-gray-900 text-white text-xs rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label class="text-xs text-gray-400 mb-1 block">Rest (min)</label>
+                      <input 
+                        type="number" 
+                        v-model.number="builder.form.days[day.value].rest_minutes" 
+                        min="0" 
+                        max="10"
+                        required
+                        class="w-full bg-gray-900 text-white text-xs rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-400 mb-1 block">Intensity</label>
+                    <select 
+                      v-model="builder.form.days[day.value].intensity" 
+                      required
+                      class="w-full bg-gray-900 text-white text-xs rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none"
+                    >
+                      <option value="easy">Easy</option>
+                      <option value="medium">Medium</option>
+                      <option value="hard">Hard</option>
+                    </select>
+                  </div>
+                </div>
+                <div v-else class="text-center py-4 text-gray-500 text-xs">Rest Day</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+            <button 
+              type="button"
+              @click="closeBuilder" 
+              class="px-5 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-semibold transition-colors"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit"
+              class="px-6 py-3 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold transition-all shadow-lg shadow-orange-500/20"
+            >
+              {{ builder.editing ? 'Update Routine' : 'Create Routine' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Workout Runner Modal -->
     <div v-if="runner.open" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div class="bg-gradient-to-br from-gray-950 to-gray-900 border border-gray-800 rounded-2xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -312,6 +478,7 @@
         </div>
       </div>
     </div>
+
   </DashboardLayout>
 </template>
 
