@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // This table is already dropped in the previous migration
-        // This migration is kept for consistency but does nothing
-        Schema::dropIfExists('workout_routine_days');
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('is_admin')->default(false)->after('email_verified_at');
+        });
     }
 
     /**
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('workout_routine_days', function (Blueprint $table) {
-            //
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('is_admin');
         });
     }
 };

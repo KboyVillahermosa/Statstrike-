@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Drop the dependent table first to remove foreign key constraints
+        Schema::dropIfExists('workout_routine_days');
+        // Then drop the parent table
         Schema::dropIfExists('workout_routines');
     }
 
