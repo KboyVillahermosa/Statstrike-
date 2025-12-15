@@ -61,8 +61,9 @@
         </span>
       </div>
       
+
       <button 
-        @click="$emit('start-workout', workout)"
+        @click="$emit('start-workout', { ...workout, routine_id: routine.id, day_of_week: day.value })"
         class="w-full mt-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm font-bold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transform hover:scale-[1.02]"
       >
         Start Workout

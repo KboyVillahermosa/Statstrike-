@@ -206,10 +206,112 @@
           Create Routine
         </button>
       </div>
+
     </div>
 
     <!-- Builder Modal (unchanged) -->
-    <!-- Workout Runner Modal (unchanged) -->
+    
+    <!-- Workout Runner Modal -->
+    <div v-if="runner.open" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div class="bg-gradient-to-br from-gray-950 to-gray-900 border border-gray-800 rounded-2xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">{{ runner.workout?.title || 'Workout Session' }}</h2>
+            <div class="flex items-center gap-3 text-sm text-gray-400">
+              <span>Round {{ session.round }} / {{ runner.workout?.rounds || 1 }}</span>
+              <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
+              <span class="capitalize">{{ phaseLabel }}</span>
+            </div>
+          </div>
+          <button 
+            @click="closeRunner()" 
+            class="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Timer Display -->
+        <div class="text-center mb-8">
+          <div class="text-6xl sm:text-8xl font-bold text-white mb-2 font-mono">{{ mmss }}</div>
+          <div class="text-lg text-gray-400 capitalize">{{ phaseLabel }} Phase</div>
+        </div>
+
+        <!-- Current Exercise -->
+        <div v-if="session.phase === 'work'" class="bg-gray-800/50 rounded-xl p-6 mb-6">
+          <h3 class="text-lg font-semibold text-white mb-3">Current Exercise</h3>
+          <div class="text-2xl font-bold text-orange-400">{{ currentExerciseLabel }}</div>
+          <div class="text-sm text-gray-400 mt-2">Exercise {{ session.itemIndex + 1 }} of {{ runner.workout?.exercises?.length || 0 }}</div>
+        </div>
+
+        <!-- Camera Section -->
+        <div class="mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-white">Camera</h3>
+            <button 
+              @click="toggleCamera()" 
+              class="px-4 py-2 rounded-lg font-medium transition-colors"
+              :class="cameraOpen 
+                ? 'bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30' 
+                : 'bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700'"
+            >
+              {{ cameraOpen ? 'Stop Camera' : 'Start Camera' }}
+            </button>
+          </div>
+          
+          <div v-if="cameraError" class="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-4">
+            <p class="text-red-400 text-sm">{{ cameraError }}</p>
+          </div>
+          
+          <div v-if="cameraOpen" class="bg-black rounded-lg overflow-hidden">
+            <video 
+              ref="cameraVideo" 
+              class="w-full h-64 object-cover" 
+              autoplay 
+              playsinline
+              muted
+            ></video>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button 
+            @click="togglePause()" 
+            class="flex-1 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 text-blue-400 font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path v-if="session.paused" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m6-10V7a3 3 0 00-3-3H9a3 3 0 00-3 3v4a1 1 0 001 1h1m8 0H8m8 0v4a1 1 0 01-1 1h-1M9 13v4a1 1 0 001 1h1m8 0h-1v4a1 1 0 01-1 1h-1" />
+              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+            </svg>
+            {{ session.paused ? 'Resume' : 'Pause' }}
+          </button>
+          
+          <button 
+            @click="skipPhase()" 
+            class="flex-1 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 text-orange-400 font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            Skip Phase
+          </button>
+          
+          <button 
+            @click="closeRunner()" 
+            class="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            End Workout
+          </button>
+        </div>
+      </div>
+    </div>
   </DashboardLayout>
 </template>
 
