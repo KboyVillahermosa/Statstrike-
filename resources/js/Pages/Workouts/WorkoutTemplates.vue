@@ -76,15 +76,21 @@
             <!-- First Row: Monday - Thursday -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 lg:gap-6 mb-4 sm:mb-5 lg:mb-6">
               <!-- Monday -->
+
               <div 
                 class="rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] min-h-[350px]"
                 :class="getDayWorkout(routine, 'monday') 
                   ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border-orange-500/40 hover:border-orange-500/60 shadow-xl shadow-orange-500/10' 
                   : 'bg-gradient-to-br from-gray-800/40 via-gray-800/30 to-gray-900/40 border-gray-700/40 hover:border-gray-600/60 shadow-lg'"
               >
-                <DayCard :day="getDayOfWeek('monday')" :routine="routine" />
+                <DayCard 
+                  :day="getDayOfWeek('monday')" 
+                  :routine="routine" 
+                  @start-workout="startWorkout"
+                />
               </div>
               
+
               <!-- Tuesday -->
               <div 
                 class="rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] min-h-[350px]"
@@ -92,12 +98,17 @@
                   ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border-orange-500/40 hover:border-orange-500/60 shadow-xl shadow-orange-500/10' 
                   : 'bg-gradient-to-br from-gray-800/40 via-gray-800/30 to-gray-900/40 border-gray-700/40 hover:border-gray-600/60 shadow-lg'"
               >
-                <DayCard :day="getDayOfWeek('tuesday')" :routine="routine" />
+                <DayCard 
+                  :day="getDayOfWeek('tuesday')" 
+                  :routine="routine" 
+                  @start-workout="startWorkout"
+                />
               </div>
             </div>
             
             <!-- Second Row: Wednesday - Thursday -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 lg:gap-6 mb-4 sm:mb-5 lg:mb-6">
+
               <!-- Wednesday -->
               <div 
                 class="rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] min-h-[350px]"
@@ -105,9 +116,14 @@
                   ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border-orange-500/40 hover:border-orange-500/60 shadow-xl shadow-orange-500/10' 
                   : 'bg-gradient-to-br from-gray-800/40 via-gray-800/30 to-gray-900/40 border-gray-700/40 hover:border-gray-600/60 shadow-lg'"
               >
-                <DayCard :day="getDayOfWeek('wednesday')" :routine="routine" />
+                <DayCard 
+                  :day="getDayOfWeek('wednesday')" 
+                  :routine="routine" 
+                  @start-workout="startWorkout"
+                />
               </div>
               
+
               <!-- Thursday -->
               <div 
                 class="rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] min-h-[350px]"
@@ -115,12 +131,17 @@
                   ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border-orange-500/40 hover:border-orange-500/60 shadow-xl shadow-orange-500/10' 
                   : 'bg-gradient-to-br from-gray-800/40 via-gray-800/30 to-gray-900/40 border-gray-700/40 hover:border-gray-600/60 shadow-lg'"
               >
-                <DayCard :day="getDayOfWeek('thursday')" :routine="routine" />
+                <DayCard 
+                  :day="getDayOfWeek('thursday')" 
+                  :routine="routine" 
+                  @start-workout="startWorkout"
+                />
               </div>
             </div>
             
             <!-- Third Row: Friday - Sunday -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+
               <!-- Friday -->
               <div 
                 class="rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] min-h-[350px]"
@@ -128,9 +149,14 @@
                   ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border-orange-500/40 hover:border-orange-500/60 shadow-xl shadow-orange-500/10' 
                   : 'bg-gradient-to-br from-gray-800/40 via-gray-800/30 to-gray-900/40 border-gray-700/40 hover:border-gray-600/60 shadow-lg'"
               >
-                <DayCard :day="getDayOfWeek('friday')" :routine="routine" />
+                <DayCard 
+                  :day="getDayOfWeek('friday')" 
+                  :routine="routine" 
+                  @start-workout="startWorkout"
+                />
               </div>
               
+
               <!-- Saturday -->
               <div 
                 class="rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] min-h-[350px]"
@@ -138,9 +164,14 @@
                   ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border-orange-500/40 hover:border-orange-500/60 shadow-xl shadow-orange-500/10' 
                   : 'bg-gradient-to-br from-gray-800/40 via-gray-800/30 to-gray-900/40 border-gray-700/40 hover:border-gray-600/60 shadow-lg'"
               >
-                <DayCard :day="getDayOfWeek('saturday')" :routine="routine" />
+                <DayCard 
+                  :day="getDayOfWeek('saturday')" 
+                  :routine="routine" 
+                  @start-workout="startWorkout"
+                />
               </div>
               
+
               <!-- Sunday -->
               <div 
                 class="rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] min-h-[350px]"
@@ -148,7 +179,11 @@
                   ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border-orange-500/40 hover:border-orange-500/60 shadow-xl shadow-orange-500/10' 
                   : 'bg-gradient-to-br from-gray-800/40 via-gray-800/30 to-gray-900/40 border-gray-700/40 hover:border-gray-600/60 shadow-lg'"
               >
-                <DayCard :day="getDayOfWeek('sunday')" :routine="routine" />
+                <DayCard 
+                  :day="getDayOfWeek('sunday')" 
+                  :routine="routine" 
+                  @start-workout="startWorkout"
+                />
               </div>
             </div>
           </div>
