@@ -307,14 +307,70 @@
                     placeholder="Description (optional)"
                   ></textarea>
                   <div>
-                    <label class="text-xs text-gray-400 mb-1 block">Exercises (one per line) *</label>
-                    <textarea 
-                      v-model="builder.form.days[day.value].exercisesRaw" 
-                      required
-                      class="w-full bg-gray-900 text-white text-xs rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none resize-none" 
-                      rows="4" 
-                      placeholder="Exercise 1&#10;Exercise 2&#10;Exercise 3"
-                    ></textarea>
+                    <div class="flex items-center justify-between mb-1">
+                      <label class="text-xs text-gray-400 block">Exercises *</label>
+                      <button
+                        type="button"
+                        @click="addExercise(day.value)"
+                        class="text-xs px-2 py-1 rounded bg-orange-500/20 text-orange-400 border border-orange-500/40 hover:bg-orange-500/30 transition-colors"
+                      >
+                        + Add Exercise
+                      </button>
+                    </div>
+                    <div v-if="(builder.form.days[day.value].exercises || []).length" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar pr-1">
+                      <div
+                        v-for="(exercise, idx) in builder.form.days[day.value].exercises"
+                        :key="idx"
+                        class="flex items-center gap-2"
+                      >
+                        <input
+                          v-model="exercise.label"
+                          class="flex-1 bg-gray-900 text-white text-xs rounded px-3 py-2 border border-gray-700 focus:border-orange-500 focus:outline-none"
+                          placeholder="Exercise name"
+                        />
+                        <div class="flex items-center gap-1">
+                          <input
+                            type="number"
+                            v-model.number="exercise.seconds"
+                            min="5"
+                            max="3600"
+                            class="w-16 bg-gray-900 text-white text-xs rounded px-2 py-1 border border-gray-700 focus:border-orange-500 focus:outline-none text-center"
+                          />
+                          <span class="text-xs text-gray-400">sec</span>
+                        </div>
+                        <div class="flex gap-1">
+                          <button
+                            type="button"
+                            class="text-[10px] px-1.5 py-1 rounded bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700"
+                            @click="exercise.seconds = 30"
+                          >
+                            30s
+                          </button>
+                          <button
+                            type="button"
+                            class="text-[10px] px-1.5 py-1 rounded bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700"
+                            @click="exercise.seconds = 60"
+                          >
+                            60s
+                          </button>
+                          <button
+                            type="button"
+                            class="text-[10px] px-1.5 py-1 rounded bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700"
+                            @click="exercise.seconds = 90"
+                          >
+                            90s
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          class="text-gray-500 hover:text-red-400 text-xs"
+                          @click="removeExercise(day.value, idx)"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    </div>
+                    <p v-else class="text-xs text-gray-500 italic mt-1">Add at least one exercise.</p>
                   </div>
                   <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -527,7 +583,7 @@ const builder = ref({
       acc[day.value] = {
         title: '',
         description: '',
-        exercisesRaw: '',
+        exercises: [],
         rounds: 5,
         intensity: 'medium',
         rest_minutes: 2,
@@ -549,7 +605,7 @@ function toggleDayWorkout(dayValue) {
     builder.value.form.days[dayValue] = {
       title: '',
       description: '',
-      exercisesRaw: '',
+      exercises: [],
       rounds: 5,
       intensity: 'medium',
       rest_minutes: 2,
@@ -577,10 +633,24 @@ function editRoutine(routine) {
   daysOfWeek.forEach(day => {
     const dayWorkout = routine.days?.find(d => d.day_of_week === day.value);
     if (dayWorkout) {
+      const rawExercises = Array.isArray(dayWorkout.exercises) ? dayWorkout.exercises : [];
+      const mappedExercises = rawExercises.map(e => {
+        if (typeof e === 'string') {
+          return {
+            label: e,
+            seconds: defaultSecondsForIntensity(dayWorkout.intensity || 'medium'),
+          };
+        }
+        return {
+          label: e?.label || '',
+          seconds: e?.seconds || defaultSecondsForIntensity(dayWorkout.intensity || 'medium'),
+        };
+      });
+
       builder.value.form.days[day.value] = {
         title: dayWorkout.title,
         description: dayWorkout.description || '',
-        exercisesRaw: Array.isArray(dayWorkout.exercises) ? dayWorkout.exercises.join('\n') : '',
+        exercises: mappedExercises,
         rounds: dayWorkout.rounds,
         intensity: dayWorkout.intensity,
         rest_minutes: dayWorkout.rest_minutes,
@@ -590,7 +660,7 @@ function editRoutine(routine) {
       builder.value.form.days[day.value] = {
         title: '',
         description: '',
-        exercisesRaw: '',
+        exercises: [],
         rounds: 5,
         intensity: 'medium',
         rest_minutes: 2,
@@ -608,13 +678,45 @@ function resetBuilderForm() {
     builder.value.form.days[day.value] = {
       title: '',
       description: '',
-      exercisesRaw: '',
+      exercises: [],
       rounds: 5,
       intensity: 'medium',
       rest_minutes: 2,
       enabled: false,
     };
   });
+}
+
+// Per-exercise timer helpers
+function defaultSecondsForIntensity(intensity) {
+  switch (intensity) {
+    case 'hard':
+      return 90;
+    case 'medium':
+      return 60;
+    default:
+      return 45;
+  }
+}
+
+function ensureExercises(dayValue) {
+  const day = builder.value.form.days[dayValue];
+  if (!Array.isArray(day.exercises)) {
+    day.exercises = [];
+  }
+}
+
+function addExercise(dayValue) {
+  ensureExercises(dayValue);
+  builder.value.form.days[dayValue].exercises.push({
+    label: '',
+    seconds: defaultSecondsForIntensity(builder.value.form.days[dayValue].intensity),
+  });
+}
+
+function removeExercise(dayValue, index) {
+  ensureExercises(dayValue);
+  builder.value.form.days[dayValue].exercises.splice(index, 1);
 }
 
 function closeBuilder() {
@@ -631,10 +733,14 @@ function saveRoutine() {
       .filter(day => builder.value.form.days[day.value].enabled)
       .map(day => {
         const dayData = builder.value.form.days[day.value];
-        const exercises = dayData.exercisesRaw
-          .split('\n')
-          .map(e => e.trim())
-          .filter(e => e.length > 0);
+        ensureExercises(day.value);
+
+        const exercises = (dayData.exercises || [])
+          .map(e => ({
+            label: (e.label || '').trim(),
+            seconds: Number(e.seconds) || defaultSecondsForIntensity(dayData.intensity),
+          }))
+          .filter(e => e.label.length > 0);
         
         if (exercises.length === 0 || !dayData.title) {
           return null;
@@ -695,7 +801,15 @@ function getDayWorkout(routine, dayOfWeek) {
 
 // Workout runner
 const runner = ref({ open: false, workout: null });
-const session = ref({ round: 1, itemIndex: 0, phase: 'work', remaining: 0, paused: false, timerId: null });
+const session = ref({
+  round: 1,
+  itemIndex: 0,
+  phase: 'work',
+  remaining: 0,
+  paused: false,
+  timerId: null,
+  startedAt: null,
+});
 
 // Camera state
 const cameraOpen = ref(false);
@@ -712,17 +826,22 @@ const mmss = computed(() => {
   return `${m}:${r}`;
 });
 
-const intensityToSeconds = (intensity) => {
-  switch (intensity) {
-    case 'hard': return 8 * 60;
-    case 'medium': return 5 * 60;
-    default: return 3 * 60;
+function durationForExercise(workout, index) {
+  const exercises = workout?.exercises || [];
+  const item = exercises[index] ?? exercises[0];
+  if (item && typeof item === 'object' && typeof item.seconds === 'number') {
+    return Math.max(5, item.seconds | 0);
   }
-};
-
-function itemDurationFor(workout) {
-  const total = intensityToSeconds(workout?.intensity || 'easy');
-  const count = Math.max(1, (workout?.exercises || []).length);
+  // Fallback: approximate duration based on intensity and count
+  const count = Math.max(1, exercises.length || 1);
+  const baseByIntensity = (intensity) => {
+    switch (intensity) {
+      case 'hard': return 8 * 60;
+      case 'medium': return 5 * 60;
+      default: return 3 * 60;
+    }
+  };
+  const total = baseByIntensity(workout?.intensity || 'easy');
   return Math.max(30, Math.floor(total / count));
 }
 
@@ -748,7 +867,7 @@ const tick = () => {
       session.value.round += 1;
       session.value.phase = 'work';
       session.value.itemIndex = 0;
-      session.value.remaining = itemDurationFor(runner.value.workout);
+      session.value.remaining = durationForExercise(runner.value.workout, session.value.itemIndex);
     }
   }
 };
@@ -765,15 +884,90 @@ function startWorkout(workout) {
   session.value.itemIndex = 0;
   session.value.phase = 'work';
   session.value.paused = false;
-  session.value.remaining = itemDurationFor(workout);
+  session.value.remaining = durationForExercise(workout, session.value.itemIndex);
+  session.value.startedAt = Date.now();
   startTimer();
 }
 
+function estimateDurationMinutes(workoutSnapshot, sessionSnapshot) {
+  const workout = workoutSnapshot || runner.value.workout;
+  const sessionState = sessionSnapshot || session.value;
+  if (!workout) return 1;
+
+  // Prefer actual elapsed time if available
+  if (sessionState.startedAt) {
+    const elapsedSeconds = Math.max(1, Math.round((Date.now() - sessionState.startedAt) / 1000));
+    return Math.max(1, Math.round(elapsedSeconds / 60));
+  }
+
+  const exercises = workout.exercises || [];
+  const perRoundSeconds =
+    exercises.reduce((sum, _item, idx) => sum + durationForExercise(workout, idx), 0) +
+    (workout.rest_minutes || 0) * 60;
+
+  const roundsCompleted = Math.max(1, sessionState.round || 1);
+  const totalSeconds = perRoundSeconds * roundsCompleted;
+
+  return Math.max(1, Math.round(totalSeconds / 60));
+}
+
+function logWorkoutToHistory(workoutSnapshot, sessionSnapshot) {
+  const workout = workoutSnapshot || runner.value.workout;
+  const sessionState = sessionSnapshot || session.value;
+  if (!workout) return;
+
+  const drills =
+    workout.title ||
+    (workout.exercises || [])
+      .map((e) => (typeof e === 'string' ? e : e?.label || ''))
+      .filter(Boolean)
+      .join(', ') ||
+    'Workout session';
+
+  // For analytics, count the planned rounds for this workout (even if user skipped early)
+  const roundsCompleted = Math.max(1, workout.rounds || sessionState.round || 1);
+  const durationMinutes = estimateDurationMinutes(workout, sessionState);
+
+  let rpeInput = window.prompt('Rate this workout (RPE 1-10, how hard was it?)', '7');
+  let rpe = parseInt(rpeInput ?? '7', 10);
+  if (!Number.isFinite(rpe) || rpe < 1 || rpe > 10) {
+    rpe = 7;
+  }
+
+  router.post(
+    route('workouts.store'),
+    {
+      drills,
+      rounds: roundsCompleted,
+      duration: durationMinutes,
+      rpe,
+    },
+    {
+      preserveScroll: true,
+      preserveState: true,
+      onError: () => {
+        // Fail silently to avoid blocking the UI
+        // You could hook in a toast notification here if desired
+      },
+    },
+  );
+}
+
 function closeRunner() {
+  const shouldLog = runner.value.open && runner.value.workout;
+  const workoutSnapshot = shouldLog ? { ...runner.value.workout } : null;
+  const sessionSnapshot = shouldLog ? { ...session.value } : null;
+
   clearTimer();
   closeCamera();
   runner.value.open = false;
   runner.value.workout = null;
+  session.value.startedAt = null;
+
+  if (shouldLog) {
+    // Log after UI state is cleared so any errors won't block closing the modal
+    logWorkoutToHistory(workoutSnapshot, sessionSnapshot);
+  }
 }
 
 // Camera functions
@@ -865,7 +1059,7 @@ function skipPhase() {
   if (session.value.phase === 'work') {
     if (session.value.itemIndex < (runner.value.workout.exercises || []).length - 1) {
       session.value.itemIndex += 1;
-      session.value.remaining = itemDurationFor(runner.value.workout);
+      session.value.remaining = durationForExercise(runner.value.workout, session.value.itemIndex);
     } else {
       if (session.value.round >= runner.value.workout.rounds) return closeRunner();
       session.value.phase = 'rest';
@@ -876,7 +1070,7 @@ function skipPhase() {
     session.value.round += 1;
     session.value.itemIndex = 0;
     session.value.phase = 'work';
-    session.value.remaining = itemDurationFor(runner.value.workout);
+    session.value.remaining = durationForExercise(runner.value.workout, session.value.itemIndex);
   }
 }
 
@@ -884,7 +1078,10 @@ const currentExerciseLabel = computed(() => {
   const workout = runner.value.workout;
   if (!workout) return '';
   const idx = session.value.itemIndex || 0;
-  return workout.exercises?.[idx] || '';
+  const item = workout.exercises?.[idx];
+  if (!item) return '';
+  if (typeof item === 'string') return item;
+  return item.label || '';
 });
 
 onBeforeUnmount(() => {

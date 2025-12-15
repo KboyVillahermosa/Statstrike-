@@ -32,7 +32,7 @@
         <div class="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Exercises</div>
         <ul class="space-y-1.5 max-h-32 overflow-y-auto custom-scrollbar pr-2">
           <li 
-            v-for="(exercise, idx) in workout.exercises" 
+            v-for="(exercise, idx) in displayExercises" 
             :key="idx"
             class="text-sm text-gray-300 flex items-start gap-2 leading-relaxed"
           >
@@ -102,6 +102,17 @@ const emit = defineEmits(['start-workout']);
 
 const workout = computed(() => {
   return props.routine.days?.find(d => d.day_of_week === props.day.value);
+});
+
+const displayExercises = computed(() => {
+  const w = workout.value;
+  if (!w || !Array.isArray(w.exercises)) return [];
+  return w.exercises.map((e) => {
+    if (typeof e === 'string') return e;
+    const label = e?.label || '';
+    const seconds = e?.seconds;
+    return seconds ? `${label} — ${seconds}s` : label;
+  });
 });
 </script>
 
