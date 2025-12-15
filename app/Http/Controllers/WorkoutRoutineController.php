@@ -81,7 +81,10 @@ class WorkoutRoutineController extends Controller
      */
     public function update(Request $request, WorkoutRoutine $workoutRoutine): RedirectResponse
     {
-        $this->authorize('update', $workoutRoutine);
+        // Simple ownership check to avoid authorize() dependency issues
+        if ($request->user()->id !== $workoutRoutine->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -129,9 +132,12 @@ class WorkoutRoutineController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkoutRoutine $workoutRoutine): RedirectResponse
+    public function destroy(Request $request, WorkoutRoutine $workoutRoutine): RedirectResponse
     {
-        $this->authorize('delete', $workoutRoutine);
+        // Simple ownership check to avoid authorize() dependency issues
+        if ($request->user()->id !== $workoutRoutine->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $workoutRoutine->delete();
 
