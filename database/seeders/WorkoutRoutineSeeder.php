@@ -37,6 +37,7 @@ class WorkoutRoutineSeeder extends Seeder
     }
 
 
+
     private function createBoxingRoutine(User $user): void
     {
         $routine = $user->workoutRoutines()->create([
@@ -51,17 +52,24 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Boxing Conditioning A',
                 'description' => 'Fundamentals with warm-up, main circuit, and finisher',
                 'exercises' => [
-                    'Jumping jacks – 1 min',
-                    'Arm circles – 30s forward, 30s backward',
-                    'Hip rotations – 1 min',
-                    'Dynamic stretches – leg swings, torso twists (1 min)',
-                    'In-place footwork shuffle – 1 min',
-                    'Shadow Boxing – 2 min (Focus on jabs, crosses, guard up, light combos)',
-                    'Push-ups – 45s (Build upper-body endurance for punching)',
-                    'Squat to Alternating Knee – 45s (Develop explosive movement and balance)',
-                    'Plank – 45s',
-                    'Fast straights (air punches) – 30s',
-                    'Slow-controlled combos – 30s'
+                    'WARM-UP (5–7 min):',
+                    '• Jumping jacks – 1 min',
+                    '• Arm circles – 30s forward, 30s backward',
+                    '• Hip rotations – 1 min',
+                    '• Dynamic stretches – leg swings, torso twists (1 min)',
+                    '• In-place footwork shuffle – 1 min',
+                    '',
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Shadow Boxing – 2 min (Focus on jabs, crosses, guard up, light combos)',
+                    '2. Push-ups – 45s (Build upper-body endurance for punching)',
+                    '3. Squat to Alternating Knee – 45s (Develop explosive movement and balance)',
+                    '4. Plank – 45s',
+                    '',
+                    'Rest – 1 minute between circuits',
+                    '',
+                    'FINISHER:',
+                    '• Fast straights (air punches) – 30s',
+                    '• Slow-controlled combos – 30s'
                 ],
                 'rounds' => 3,
                 'intensity' => 'medium',
@@ -73,10 +81,9 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Recovery / Light Mobility',
                 'description' => 'Active recovery day with light movement',
                 'exercises' => [
-                    'Light jogging in place – 5 min',
-                    'Gentle stretching – 10 min',
-                    'Mobility exercises – 10 min',
-                    'Breathing exercises – 5 min'
+                    '• Light movement – 15 min',
+                    '• Gentle stretching – 15 min',
+                    '• Foam rolling – 10 min'
                 ],
                 'rounds' => 2,
                 'intensity' => 'easy',
@@ -88,16 +95,19 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Boxing Conditioning B',
                 'description' => 'Advanced boxing with head movement focus',
                 'exercises' => [
-                    'Jumping jacks – 1 min',
-                    'Arm circles – 30s forward, 30s backward',
-                    'Hip rotations – 1 min',
-                    'Dynamic stretches – leg swings, torso twists (1 min)',
-                    'In-place footwork shuffle – 1 min',
-                    'Shadow Boxing (Head Movement Focus) – 2 min (Slip left/right, roll under hooks)',
-                    'Burpees – 30s (Anaerobic explosion for ring conditioning)',
-                    'Reverse lunges – 45s',
-                    'Russian twists – 45s',
-                    '1 min nonstop jab (light speed)'
+                    'WARM-UP (5–7 min):',
+                    '• Same as Day 1',
+                    '',
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Shadow Boxing (Head Movement Focus) – 2 min (Slip left/right, roll under hooks)',
+                    '2. Burpees – 30s (Anaerobic explosion for ring conditioning)',
+                    '3. Reverse lunges – 45s',
+                    '4. Russian twists – 45s',
+                    '',
+                    'Rest – 1 min',
+                    '',
+                    'FINISHER:',
+                    '• 1 min nonstop jab (light speed)'
                 ],
                 'rounds' => 3,
                 'intensity' => 'hard',
@@ -109,12 +119,19 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Core & Footwork Burner',
                 'description' => 'Core strength and footwork emphasis',
                 'exercises' => [
-                    'Light skip + dynamic stretch',
-                    'Lateral footwork line drill – 1 min (Step left/right, stay light on toes)',
-                    'Forward-backward footwork – 1 min',
-                    'Plank – 45s',
-                    'Leg raises – 15 reps',
-                    'Flutter kicks – 30s'
+                    'WARM-UP:',
+                    '• Light skip + dynamic stretch',
+                    '',
+                    'MAIN CIRCUIT (Repeat 2×):',
+                    '1. Lateral footwork line drill – 1 min (Step left/right, stay light on toes)',
+                    '2. Forward-backward footwork – 1 min',
+                    '',
+                    '3. Core circuit:',
+                    '   • Plank – 45s',
+                    '   • Leg raises – 15 reps',
+                    '   • Flutter kicks – 30s',
+                    '',
+                    'Rest – 1 min'
                 ],
                 'rounds' => 2,
                 'intensity' => 'hard',
@@ -126,9 +143,9 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Active Recovery',
                 'description' => 'Light activity and movement',
                 'exercises' => [
-                    'Light walk or easy movement – 15 min',
-                    'Gentle stretching – 15 min',
-                    'Foam rolling – 10 min'
+                    '• Light walk or easy movement – 15 min',
+                    '• Gentle stretching – 15 min',
+                    '• Foam rolling – 10 min'
                 ],
                 'rounds' => 2,
                 'intensity' => 'easy',
@@ -140,11 +157,16 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Boxing Conditioning C',
                 'description' => 'Combinations and defense focus',
                 'exercises' => [
-                    'Basic mobility + shadow boxing',
-                    'Shadow Boxing (Combos + Defense) – 3 min (1–2, slip, 1–2–3, roll)',
-                    'Mountain climbers – 45s',
-                    'Jump squats – 30s',
-                    'Hollow hold – 30s'
+                    'WARM-UP:',
+                    '• Basic mobility + shadow boxing',
+                    '',
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Shadow Boxing (Combos + Defense) – 3 min (1–2, slip, 1–2–3, roll)',
+                    '2. Mountain climbers – 45s',
+                    '3. Jump squats – 30s',
+                    '4. Hollow hold – 30s',
+                    '',
+                    'Rest – 1 min'
                 ],
                 'rounds' => 3,
                 'intensity' => 'hard',
@@ -165,6 +187,7 @@ class WorkoutRoutineSeeder extends Seeder
     }
 
 
+
     private function createMuayThaiRoutine(User $user): void
     {
         $routine = $user->workoutRoutines()->create([
@@ -179,15 +202,20 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'MT Conditioning A',
                 'description' => 'Fundamental Muay Thai with warm-up and circuit',
                 'exercises' => [
-                    'High knees – 1 min',
-                    'Butt kicks – 1 min',
-                    'Hip-opening stretches – 1 min',
-                    'Knee raise steps – 1 min',
-                    'Light shadow Muay Thai – 1 min',
-                    'Shadow Muay Thai – 2 min (Focus: jabs, crosses, teeps, light roundhouse motions)',
-                    'Knee strikes (air) – 45s (Drive hips, switch knees every 2 reps)',
-                    'Squats – 45s (Power base for kicks and teeps)',
-                    'Plank – 45s'
+                    'WARM-UP (5–7 min):',
+                    '• High knees – 1 min',
+                    '• Butt kicks – 1 min',
+                    '• Hip-opening stretches – 1 min',
+                    '• Knee raise steps – 1 min',
+                    '• Light shadow Muay Thai – 1 min',
+                    '',
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Shadow Muay Thai – 2 min (Focus: jabs, crosses, teeps, light roundhouse motions)',
+                    '2. Knee strikes (air) – 45s (Drive hips, switch knees every 2 reps)',
+                    '3. Squats – 45s (Power base for kicks and teeps)',
+                    '4. Plank – 45s',
+                    '',
+                    'Rest – 1 minute'
                 ],
                 'rounds' => 3,
                 'intensity' => 'medium',
@@ -199,9 +227,9 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Active Recovery / Mobility',
                 'description' => 'Light movement and mobility work',
                 'exercises' => [
-                    'Light stretching – 15 min',
-                    'Mobility exercises – 15 min',
-                    'Gentle movement – 10 min'
+                    '• Light stretching – 15 min',
+                    '• Mobility exercises – 15 min',
+                    '• Gentle movement – 10 min'
                 ],
                 'rounds' => 2,
                 'intensity' => 'easy',
@@ -213,11 +241,16 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'MT Conditioning B',
                 'description' => 'Elbows focus with dynamic mobility',
                 'exercises' => [
-                    'Dynamic mobility with light teep motions',
-                    'Shadow Muay Thai (Elbows Focus) – 2 min (Horizontal, upward, diagonal elbows)',
-                    'Lunge-to-knee combo – 10 each leg (Explosive knee mechanics)',
-                    'Sprawls – 30s (For overall fight conditioning)',
-                    'Side planks – 30s each side'
+                    'WARM-UP:',
+                    '• Dynamic mobility with light teep motions',
+                    '',
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Shadow Muay Thai (Elbows Focus) – 2 min (Horizontal, upward, diagonal elbows)',
+                    '2. Lunge-to-knee combo – 10 each leg (Explosive knee mechanics)',
+                    '3. Sprawls – 30s (For overall fight conditioning)',
+                    '4. Side planks – 30s each side',
+                    '',
+                    'Rest – 1 min'
                 ],
                 'rounds' => 3,
                 'intensity' => 'hard',
@@ -229,10 +262,13 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Clinch & Balance Drills',
                 'description' => 'Balance and clinch control training',
                 'exercises' => [
-                    'Single-leg balance with knee chamber – 45s each leg (Develops stability for kicks)',
-                    'Hip rotation drills – 1 min (Simulate roundhouse mechanics)',
-                    'Seated knee tucks – 30s',
-                    'Plank with reach – 30s'
+                    'MAIN CIRCUIT (Repeat 2×):',
+                    '1. Single-leg balance with knee chamber – 45s each leg (Develops stability for kicks)',
+                    '2. Hip rotation drills – 1 min (Simulate roundhouse mechanics)',
+                    '',
+                    '3. Core circuit:',
+                    '   • Seated knee tucks – 30s',
+                    '   • Plank with reach – 30s'
                 ],
                 'rounds' => 2,
                 'intensity' => 'medium',
@@ -244,9 +280,9 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Recovery',
                 'description' => 'Complete recovery day',
                 'exercises' => [
-                    'Gentle stretching – 20 min',
-                    'Light movement – 15 min',
-                    'Breathing exercises – 10 min'
+                    '• Gentle stretching – 20 min',
+                    '• Light movement – 15 min',
+                    '• Breathing exercises – 10 min'
                 ],
                 'rounds' => 2,
                 'intensity' => 'easy',
@@ -258,11 +294,16 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'MT Conditioning C',
                 'description' => 'Combinations and flow training',
                 'exercises' => [
-                    'Light Muay Thai flow',
-                    'Shadow Muay Thai (Combinations) – 3 min (Punch-kick-knee-elbow flow)',
-                    'Fast teeps (air) – 45s',
-                    'Jump lunges – 30s',
-                    'Bicycle crunches – 45s'
+                    'WARM-UP:',
+                    '• Light Muay Thai flow',
+                    '',
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Shadow Muay Thai (Combinations) – 3 min (Punch-kick-knee-elbow flow)',
+                    '2. Fast teeps (air) – 45s',
+                    '3. Jump lunges – 30s',
+                    '4. Bicycle crunches – 45s',
+                    '',
+                    'Rest – 1 min'
                 ],
                 'rounds' => 3,
                 'intensity' => 'hard',
@@ -398,6 +439,7 @@ class WorkoutRoutineSeeder extends Seeder
     }
 
 
+
     private function createFullBodyRoutine(User $user): void
     {
         $routine = $user->workoutRoutines()->create([
@@ -412,15 +454,20 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Total Body A',
                 'description' => 'Full body workout with warm-up and circuit',
                 'exercises' => [
-                    'Jog in place – 1 min',
-                    'Dynamic leg swings – 1 min',
-                    'Hip circles – 1 min',
-                    'Arm swings – 1 min',
-                    'Light full-body movement – 1 min',
-                    'Push-ups – 45s',
-                    'Air squats – 45s',
-                    'Plank shoulder taps – 45s',
-                    'High knees – 30s'
+                    'WARM-UP (5 min):',
+                    '• Jog in place – 1 min',
+                    '• Dynamic leg swings – 1 min',
+                    '• Hip circles – 1 min',
+                    '• Arm swings – 1 min',
+                    '• Light full-body movement – 1 min',
+                    '',
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Push-ups – 45s',
+                    '2. Air squats – 45s',
+                    '3. Plank shoulder taps – 45s',
+                    '4. High knees – 30s',
+                    '',
+                    'Rest – 1 min'
                 ],
                 'rounds' => 3,
                 'intensity' => 'medium',
@@ -432,9 +479,9 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Mobility / Light Stretching',
                 'description' => 'Recovery and mobility focus',
                 'exercises' => [
-                    'Gentle stretching – 20 min',
-                    'Mobility exercises – 15 min',
-                    'Light movement – 10 min'
+                    '• Gentle stretching – 20 min',
+                    '• Mobility exercises – 15 min',
+                    '• Light movement – 10 min'
                 ],
                 'rounds' => 2,
                 'intensity' => 'easy',
@@ -446,11 +493,11 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Total Body B',
                 'description' => 'Advanced full body conditioning',
                 'exercises' => [
-                    'Dynamic warm-up – 5 min',
-                    'Lunges – 45s',
-                    'Mountain climbers – 45s',
-                    'Sit-ups – 45s',
-                    'Fast feet – 30s'
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Lunges – 45s',
+                    '2. Mountain climbers – 45s',
+                    '3. Sit-ups – 45s',
+                    '4. Fast feet – 30s'
                 ],
                 'rounds' => 3,
                 'intensity' => 'hard',
@@ -462,11 +509,11 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Core & Agility',
                 'description' => 'Core strength and agility training',
                 'exercises' => [
-                    'Light warm-up – 3 min',
-                    'Lateral shuffle – 1 min',
-                    'Plank – 1 min',
-                    'Bicycle crunches – 45s',
-                    'Burpees – 30s'
+                    'CIRCUIT (Repeat 2×):',
+                    '1. Lateral shuffle – 1 min',
+                    '2. Plank – 1 min',
+                    '3. Bicycle crunches – 45s',
+                    '4. Burpees – 30s'
                 ],
                 'rounds' => 2,
                 'intensity' => 'medium',
@@ -478,9 +525,9 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Recovery',
                 'description' => 'Complete recovery day',
                 'exercises' => [
-                    'Gentle stretching – 20 min',
-                    'Light walking – 15 min',
-                    'Breathing exercises – 10 min'
+                    '• Gentle stretching – 20 min',
+                    '• Light walking – 15 min',
+                    '• Breathing exercises – 10 min'
                 ],
                 'rounds' => 2,
                 'intensity' => 'easy',
@@ -492,11 +539,11 @@ class WorkoutRoutineSeeder extends Seeder
                 'title' => 'Total Body C',
                 'description' => 'Final total body conditioning session',
                 'exercises' => [
-                    'Dynamic warm-up – 5 min',
-                    'Wide push-ups – 45s',
-                    'Squat pulses – 30s',
-                    'Reverse crunches – 45s',
-                    'Skaters – 45s'
+                    'MAIN CIRCUIT (Repeat 3×):',
+                    '1. Wide push-ups – 45s',
+                    '2. Squat pulses – 30s',
+                    '3. Reverse crunches – 45s',
+                    '4. Skaters – 45s'
                 ],
                 'rounds' => 3,
                 'intensity' => 'hard',
