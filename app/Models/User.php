@@ -28,6 +28,7 @@ class User extends Authenticatable
         'device_capability',
         'mediapipe_supported',
         'points',
+        'is_admin',
     ];
 
     /**
@@ -52,6 +53,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'device_capability' => 'array',
             'mediapipe_supported' => 'boolean',
+            'is_admin' => 'boolean',
         ];
     }
 
@@ -111,5 +113,13 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin === true;
     }
 }

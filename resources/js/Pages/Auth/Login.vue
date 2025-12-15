@@ -44,6 +44,18 @@ const submit = () => {
             <p class="text-green-400 text-sm font-medium">{{ status }}</p>
         </div>
 
+        <!-- General Error Message -->
+        <div v-if="form.hasErrors" class="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+            <p class="text-red-400 text-sm font-medium">
+                <span v-if="form.errors.email && form.errors.email === 'These credentials do not match our records.'">
+                    Invalid email or password. Please try again.
+                </span>
+                <span v-else-if="Object.keys(form.errors).length > 0">
+                    Please check the form for errors.
+                </span>
+            </p>
+        </div>
+
         <form @submit.prevent="submit" class="space-y-6">
             <!-- Email Field -->
             <div>

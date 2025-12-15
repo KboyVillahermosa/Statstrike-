@@ -22,8 +22,17 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+        // Create admin user
+        User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'is_admin' => true,
+        ]);
+
         $this->call([
             ChallengeSeeder::class,
+            // Uncomment to seed admin users
+            // AdminUserSeeder::class,
         ]);
     }
 }
