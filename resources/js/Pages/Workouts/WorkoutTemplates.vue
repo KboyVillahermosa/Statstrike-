@@ -1,4 +1,4 @@
-<template>
+  <template>
   <Head title="Workout Routine" />
 
   <DashboardLayout>
@@ -678,9 +678,23 @@ const intensityToSeconds = (intensity) => {
   }
 };
 
-function itemDurationFor(workout) {
+function parseExerciseDuration(exercise) {
+  if (!exercise) return null;
+  const match = exercise.match(/(\d+)\s*(?:min|minute|minutes)/i);
+  return match ? parseInt(match[1]) * 60 : null;
+}
+
+function itemDurationFor(workout, exerciseIndex = 0) {
+  const exercises = workout?.exercises || [];
+  if (exerciseIndex < exercises.length) {
+    const duration = parseExerciseDuration(exercises[exerciseIndex]);
+    if (duration !== null) {
+      return duration;
+    }
+  }
+  // Fallback to intensity-based calculation
   const total = intensityToSeconds(workout?.intensity || 'easy');
-  const count = Math.max(1, (workout?.exercises || []).length);
+  const count = Math.max(1, exercises.length);
   return Math.max(30, Math.floor(total / count));
 }
 
@@ -723,7 +737,7 @@ function startWorkout(workout) {
   session.value.itemIndex = 0;
   session.value.phase = 'work';
   session.value.paused = false;
-  session.value.remaining = itemDurationFor(workout);
+  session.value.remaining = itemDurationFor(workout, 0);
   startTimer();
 }
 
@@ -823,7 +837,7 @@ function skipPhase() {
   if (session.value.phase === 'work') {
     if (session.value.itemIndex < (runner.value.workout.exercises || []).length - 1) {
       session.value.itemIndex += 1;
-      session.value.remaining = itemDurationFor(runner.value.workout);
+      session.value.remaining = itemDurationFor(runner.value.workout, session.value.itemIndex);
     } else {
       if (session.value.round >= runner.value.workout.rounds) return closeRunner();
       session.value.phase = 'rest';
@@ -834,7 +848,7 @@ function skipPhase() {
     session.value.round += 1;
     session.value.itemIndex = 0;
     session.value.phase = 'work';
-    session.value.remaining = itemDurationFor(runner.value.workout);
+    session.value.remaining = itemDurationFor(runner.value.workout, 0);
   }
 }
 

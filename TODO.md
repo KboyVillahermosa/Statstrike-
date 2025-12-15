@@ -1,4 +1,4 @@
-# Community.vue Update Task
+    # Community.vue Update Task
 
 ## Completed Tasks
 - [x] Replace the entire <script setup> section with the new code provided (includes FormData for image upload, formattedPosts computed property).

@@ -259,9 +259,9 @@ onMounted(() => {
                 <p class="text-gray-400">{{ challenge.description }}</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Camera Section -->
-                <div class="lg:col-span-2 space-y-4">
+            <div class="space-y-6">
+                <!-- Camera Section - Full Width -->
+                <div class="w-full">
                     <div class="bg-gray-950 border border-gray-900 rounded-lg overflow-hidden">
                         <div class="relative bg-black aspect-video flex items-center justify-center">
                             <video
@@ -349,7 +349,8 @@ onMounted(() => {
                 </div>
 
                 <!-- Timer and Controls Section -->
-                <div class="space-y-4">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-4">
                     <!-- Timer Display -->
                     <div class="bg-gray-950 border border-gray-900 rounded-lg p-6">
                         <h3 class="text-lg font-semibold text-white mb-4">Workout Timer</h3>
@@ -429,6 +430,7 @@ onMounted(() => {
                     >
                         Complete Workout
                     </button>
+                    </div>
                 </div>
             </div>
         </div>
