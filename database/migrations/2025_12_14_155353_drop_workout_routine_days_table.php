@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('workout_routine_days', function (Blueprint $table) {
-            //
-        });
+        // Table is already dropped in the previous migration (drop_workout_routines_table)
+        // This migration is a no-op to maintain migration history
     }
 
     /**
