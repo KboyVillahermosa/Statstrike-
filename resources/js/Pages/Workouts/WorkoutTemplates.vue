@@ -540,7 +540,7 @@
 
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
-import { ref, computed, onBeforeUnmount } from 'vue';
+import { ref, computed, onBeforeUnmount, watch } from 'vue';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 
 // Import the DayCard component
@@ -564,6 +564,11 @@ const daysOfWeek = [
 ];
 
 const routines = ref(props.routines || []);
+
+// Watch for prop changes and update the ref
+watch(() => props.routines, (newRoutines) => {
+  routines.value = newRoutines || [];
+}, { immediate: true, deep: true });
 
 // Helper function to get day object
 function getDayOfWeek(dayValue) {
@@ -770,7 +775,7 @@ function saveRoutine() {
       preserveScroll: true,
       onSuccess: () => {
         closeBuilder();
-        router.reload();
+        router.reload({ only: ['routines'] });
       },
     });
   } else {
@@ -778,7 +783,7 @@ function saveRoutine() {
       preserveScroll: true,
       onSuccess: () => {
         closeBuilder();
-        router.reload();
+        router.reload({ only: ['routines'] });
       },
     });
   }
@@ -789,7 +794,7 @@ function deleteRoutine(id) {
     router.delete(route('workouts.routines.destroy', id), {
       preserveScroll: true,
       onSuccess: () => {
-        router.reload();
+        router.reload({ only: ['routines'] });
       },
     });
   }
@@ -944,7 +949,13 @@ function logWorkoutToHistory(workoutSnapshot, sessionSnapshot) {
     },
     {
       preserveScroll: true,
-      preserveState: true,
+      onSuccess: () => {
+        // Reload to update history if on history page
+        // Check if we're on the history page and reload it
+        if (window.location.pathname.includes('/workouts/history')) {
+          router.reload({ only: ['workouts', 'analytics'] });
+        }
+      },
       onError: () => {
         // Fail silently to avoid blocking the UI
         // You could hook in a toast notification here if desired
