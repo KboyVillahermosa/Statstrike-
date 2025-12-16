@@ -884,7 +884,28 @@ const currentExerciseLabel = computed(() => {
   const workout = runner.value.workout;
   if (!workout) return '';
   const idx = session.value.itemIndex || 0;
-  return workout.exercises?.[idx] || '';
+  const exercise = workout.exercises?.[idx];
+  if (!exercise) return '';
+  
+  // Handle if exercise is an object with label property
+  if (typeof exercise === 'object' && exercise !== null) {
+    return exercise.label || exercise.name || String(exercise);
+  }
+  
+  // Handle if exercise is a JSON string
+  if (typeof exercise === 'string') {
+    try {
+      const parsed = JSON.parse(exercise);
+      if (typeof parsed === 'object' && parsed !== null && parsed.label) {
+        return parsed.label;
+      }
+    } catch (e) {
+      // Not JSON, use as-is
+    }
+    return exercise;
+  }
+  
+  return String(exercise);
 });
 
 onBeforeUnmount(() => {

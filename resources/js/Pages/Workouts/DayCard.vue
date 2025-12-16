@@ -37,7 +37,7 @@
             class="text-sm text-gray-300 flex items-start gap-2 leading-relaxed"
           >
             <span class="text-orange-500 mt-0.5 flex-shrink-0 font-bold text-xs">▸</span>
-            <span class="flex-1">{{ exercise }}</span>
+            <span class="flex-1">{{ getExerciseLabel(exercise) }}</span>
           </li>
         </ul>
       </div>
@@ -103,6 +103,30 @@ const emit = defineEmits(['start-workout']);
 const workout = computed(() => {
   return props.routine.days?.find(d => d.day_of_week === props.day.value);
 });
+
+const getExerciseLabel = (exercise) => {
+  if (!exercise) return '';
+  
+  // Handle if exercise is an object with label property
+  if (typeof exercise === 'object' && exercise !== null) {
+    return exercise.label || exercise.name || String(exercise);
+  }
+  
+  // Handle if exercise is a JSON string
+  if (typeof exercise === 'string') {
+    try {
+      const parsed = JSON.parse(exercise);
+      if (typeof parsed === 'object' && parsed !== null && parsed.label) {
+        return parsed.label;
+      }
+    } catch (e) {
+      // Not JSON, use as-is
+    }
+    return exercise;
+  }
+  
+  return String(exercise);
+};
 </script>
 
 <style scoped>
