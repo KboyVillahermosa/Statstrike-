@@ -64,12 +64,12 @@
         <NavLink href="/community" :active="isActive('/community')" icon="community">
           Community
         </NavLink>
+
         <NavDropdown
           title="AI Tools"
           icon="ai"
           :items="[
-            { id: 1, label: 'Workout Generator', href: '/ai-tools/workout-generator', icon: 'wrench' },
-            { id: 2, label: 'Boxing Coach', href: '/ai-tools/boxing-coach', icon: 'boxing' }
+            { id: 1, label: 'Workout Generator', href: '/ai-tools/workout-generator', icon: 'wrench' }
           ]"
         />
       </nav>

@@ -49,8 +49,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         return \Inertia\Inertia::render('AITools/ProgressInsights');
     })->name('ai-tools.progress-insights');
 
-    Route::get('/ai-tools/boxing-coach', function () {
-        return \Inertia\Inertia::render('AITools/BoxingCoach');
-    })->name('ai-tools.boxing-coach');
+
+
 });
 

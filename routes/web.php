@@ -55,17 +55,24 @@ Route::middleware('auth')->group(function () {
     Route::post('/community/posts/{post}/comments', [CommunityController::class, 'storeComment'])->name('community.posts.comments.store');
 
     // AI Tools routes
+
     Route::get('/ai-tools/workout-generator', function () {
         return Inertia::render('AITools/WorkoutGenerator');
     })->name('ai-tools.workout-generator');
+
+    // API routes for AI Workout Generator
+    Route::post('/api/ai/workout-generator/generate', [App\Http\Controllers\AITools\WorkoutGeneratorController::class, 'generateWorkout'])
+        ->name('ai.workout-generator.generate');
+    
+    Route::post('/api/ai/workout-generator/save-routine', [App\Http\Controllers\AITools\WorkoutGeneratorController::class, 'saveAsRoutine'])
+        ->name('ai.workout-generator.save-routine');
 
     Route::get('/ai-tools/progress-insights', function () {
         return Inertia::render('AITools/ProgressInsights');
     })->name('ai-tools.progress-insights');
 
-    Route::get('/ai-tools/boxing-coach', function () {
-        return Inertia::render('AITools/BoxingCoach');
-    })->name('ai-tools.boxing-coach');
+
+
 });
 
 require __DIR__.'/auth.php';
