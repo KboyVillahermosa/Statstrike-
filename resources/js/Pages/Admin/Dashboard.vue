@@ -55,11 +55,19 @@ const activityBars = props.charts.activityTrends.map((day, index) => {
 });
 
 // Format user growth for chart
-const userGrowthBars = props.charts.userGrowth.map((day, index) => {
-    const maxTotal = Math.max(...props.charts.userGrowth.map(d => d.total));
+const maxUserTotal = props.charts.userGrowth.length
+    ? Math.max(...props.charts.userGrowth.map(d => d.total))
+    : 0;
+
+// Show labels only on some ticks so numbers don't visually run together
+const userGrowthBars = props.charts.userGrowth.map((day, index, arr) => {
+    const height = maxUserTotal > 0 ? Math.round((day.total / maxUserTotal) * 100) : 0;
+    const showLabel = index === 0 || index === arr.length - 1 || index % 3 === 0;
+
     return {
         label: day.date,
-        height: maxTotal > 0 ? Math.round((day.total / maxTotal) * 100) : 0,
+        displayLabel: showLabel ? day.date : '',
+        height,
         count: day.count,
         total: day.total,
     };
@@ -140,18 +148,21 @@ const formatDate = (date) => {
                 <div class="bg-gray-950 rounded-xl border border-gray-900 p-6">
                     <h3 class="text-xl font-bold text-white mb-2">User Growth (30 Days)</h3>
                     <p class="text-gray-400 text-sm mb-6">Total users over time</p>
-                    <div class="flex items-end justify-center gap-1 md:gap-2 h-48">
-                        <div
-                            v-for="(bar, index) in userGrowthBars"
-                            :key="index"
-                            class="flex flex-col items-center flex-1 gap-2"
-                            :title="`${bar.total} users on ${bar.label}`"
-                        >
+                    <!-- Scrollable container so 30 days don't overflow the card -->
+                    <div class="overflow-x-auto">
+                        <div class="flex items-end gap-1 md:gap-2 h-48 min-w-[640px] pr-2">
                             <div
-                                class="w-full bg-gradient-to-t from-orange-500 to-orange-600 rounded-t transition-all duration-300 hover:opacity-80 cursor-pointer"
-                                :style="{ height: bar.height + '%' }"
-                            ></div>
-                            <span class="text-xs text-gray-500 mt-2">{{ bar.label }}</span>
+                                v-for="(bar, index) in userGrowthBars"
+                                :key="index"
+                                class="flex flex-col items-center gap-2 flex-none w-6 sm:w-7"
+                                :title="`${bar.total} users on ${bar.label}`"
+                            >
+                                <div
+                                    class="w-full bg-gradient-to-t from-orange-500 to-orange-600 rounded-t transition-all duration-300 hover:opacity-80 cursor-pointer"
+                                    :style="{ height: bar.height + '%' }"
+                                ></div>
+                                <span class="text-xs text-gray-500 mt-2 whitespace-nowrap">{{ bar.displayLabel }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
