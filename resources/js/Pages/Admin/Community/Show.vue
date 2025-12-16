@@ -82,8 +82,8 @@ const formatDate = (date) => {
 
                         <div class="text-gray-300 mb-4 whitespace-pre-wrap">{{ post.content }}</div>
 
-                        <div v-if="post.image" class="mb-4">
-                            <img :src="post.image" alt="Post image" class="max-w-full rounded-lg" />
+                        <div v-if="post.image" class="mb-4 rounded-lg overflow-hidden">
+                            <img :src="post.image" alt="Post image" class="w-full h-auto object-cover" />
                         </div>
 
                         <div class="flex items-center gap-4 text-sm text-gray-400 pt-4 border-t border-gray-800">

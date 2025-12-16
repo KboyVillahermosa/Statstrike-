@@ -116,8 +116,8 @@ const formatDate = (date) => {
                             <div class="text-gray-300 mb-3">{{ post.content }}</div>
 
                             <!-- Post Image -->
-                            <div v-if="post.image" class="mb-3">
-                                <img :src="post.image" alt="Post image" class="max-w-md rounded-lg" />
+                            <div v-if="post.image" class="mb-3 rounded-lg overflow-hidden">
+                                <img :src="post.image" alt="Post image" class="w-full max-w-md h-auto object-cover" />
                             </div>
 
                             <!-- Stats -->

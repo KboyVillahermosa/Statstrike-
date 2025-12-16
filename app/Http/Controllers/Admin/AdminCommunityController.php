@@ -34,7 +34,22 @@ class AdminCommunityController extends Controller
         $posts = $query->withCount(['likes', 'comments'])
             ->orderBy('created_at', 'desc')
             ->paginate(20)
-            ->withQueryString();
+            ->withQueryString()
+            ->through(function ($post) {
+                return [
+                    'id' => $post->id,
+                    'content' => $post->content,
+                    'image' => $post->image ? Storage::url($post->image) : null,
+                    'created_at' => $post->created_at,
+                    'user' => [
+                        'id' => $post->user->id,
+                        'name' => $post->user->name,
+                        'email' => $post->user->email,
+                    ],
+                    'likes_count' => $post->likes_count,
+                    'comments_count' => $post->comments_count,
+                ];
+            });
 
         return Inertia::render('Admin/Community/Index', [
             'posts' => $posts,
